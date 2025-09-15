@@ -2,11 +2,13 @@
 
 import { useState } from "react";
 import { Input, Button } from "@heroui/react";
+import { useRouter } from "next/navigation";
 
 export default function SignIn() {
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
     const [loading, setLoading] = useState(false);
+    const router = useRouter();
 
     async function handleLogin(e: React.FormEvent) {
         e.preventDefault();
@@ -15,7 +17,7 @@ export default function SignIn() {
         setLoading(true);
 
         try {
-            const res = await fetch("http://localhost:8080/login", {
+            const res = await fetch("http://localhost:8080/auth/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, senha })
@@ -27,10 +29,20 @@ export default function SignIn() {
                 return;
             }
 
-            const token = await res.json();
-            localStorage.setItem("token", token);
+            const data = await res.json();
+            // aqui já vem { token, nome, email, role }
+            localStorage.setItem("token", data.token);
+
             alert("Login realizado com sucesso!");
-            // Aqui você pode redirecionar para a página principal
+
+            // Redireciona conforme o role
+            if (data.role === "COLABORADOR") {
+                router.push("/colaborador/home");
+            } else if (data.role === "GESTOR") {
+                router.push("/gestor/home");
+            } else {
+                router.push("/"); // fallback
+            }
         } catch (err) {
             console.error(err);
             alert("Erro de conexão com o servidor!");
