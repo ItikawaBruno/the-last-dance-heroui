@@ -7,28 +7,28 @@ export default function Dashboard(){
     const data = 
 [
   {
-    "id": "concluído",
-    "label": "concluído",
-    "value": 2,
+    "id": "sass",
+    "label": "sass",
+    "value": 442,
     "color": "hsl(26, 70%, 50%)"
   },
   {
-    "id": "pendente",
-    "label": "pendente",
-    "value": 7,
+    "id": "hack",
+    "label": "hack",
+    "value": 342,
     "color": "hsl(260, 70%, 50%)"
   },
   {
-    "id": "finalizado",
-    "label": "finalizado",
-    "value": 3,
+    "id": "scala",
+    "label": "scala",
+    "value": 509,
     "color": "hsl(63, 70%, 50%)"
   }
 ]
 
     const dataLine = [
   {
-    "id": "dados",
+    "id": "japan",
     "data": [
       {
         "x": "plane",
@@ -89,7 +89,7 @@ export default function Dashboard(){
                     <div className="h-full w-[40%] bg-[#ffff] rounded-md shadeow-md p-2">
                         <h1 className="text-[#993399] font-semibold">Total de Tarefas Realizadas</h1>
                         <div className="h-full w-full flex justify-center items-center">
-                            <h1 className="text-[70px] text-[#993399]">5</h1>
+                            <h1 className="text-[70px] text-[#993399]">9</h1>
                         </div>
                     </div>
                     <div className="h-full w-full bg-[#ffff] rounded-md shadeow-md p-2">
@@ -132,8 +132,8 @@ export default function Dashboard(){
                 margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
                 yScale={{ type: 'linear', min: 'auto', max: 'auto', stacked: true, reverse: false }}
                 curve="cardinal"
-                axisBottom={{ legend: 'datas', legendOffset: 36 }}
-                axisLeft={{ legend: 'pontuações', legendOffset: -40 }}
+                axisBottom={{ legend: 'transportation', legendOffset: 36 }}
+                axisLeft={{ legend: 'count', legendOffset: -40 }}
                 colors={{ scheme: 'purpleRed_green' }}
                 lineWidth={6}
                 pointSize={10}

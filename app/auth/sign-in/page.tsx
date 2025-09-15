@@ -1,23 +1,73 @@
 'use client'
-import { Form, Input, Button } from "@heroui/react";
+
+import { useState } from "react";
+import { Input, Button } from "@heroui/react";
 
 export default function SignIn() {
+    const [email, setEmail] = useState("");
+    const [senha, setSenha] = useState("");
+    const [loading, setLoading] = useState(false);
+
+    async function handleLogin(e: React.FormEvent) {
+        e.preventDefault();
+        if (!email || !senha) return alert("Preencha todos os campos!");
+
+        setLoading(true);
+
+        try {
+            const res = await fetch("http://localhost:8080/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, senha })
+            });
+
+            if (!res.ok) {
+                alert("E-mail ou senha inválidos!");
+                setLoading(false);
+                return;
+            }
+
+            const token = await res.json();
+            localStorage.setItem("token", token);
+            alert("Login realizado com sucesso!");
+            // Aqui você pode redirecionar para a página principal
+        } catch (err) {
+            console.error(err);
+            alert("Erro de conexão com o servidor!");
+        } finally {
+            setLoading(false);
+        }
+    }
+
     return (
         <div className="min-h-screen w-full flex flex-col justify-center items-center space-y-4">
             <h1 className="text-[#d68fff] text-3xl text-[40px]">VIVI</h1>
             <h4 className="text-[#d68fff]">Bem-vindo de volta!</h4>
-            <form className="w-full max-w-md bg-[#ddd6df] p-6 rounded-lg shadow-lg flex flex-col gap-4">
-                <div className="w-full h-fit flex flex-col">
-                    <label className="text-[#9615bd]">E-mail</label>
-                    <input type="email" className="rounded-md shadow-md p-1 outline-[#7c00ad]" placeholder="Digite seu e-mail"/>
-                </div>
-                <div className="w-full h-fit flex flex-col">
-                    <label className="text-[#9615bd]">Senha</label>
-                    <input type="password" className="rounded-md shadow-md p-1 outline-[#7c00ad]" placeholder="Digite sua senha"/>
-                </div>
-                <button className="mt-4 w-full bg-[#882abe] text-white rounded-md p-2">
-                    Entrar
-                </button>
+            <form 
+                className="w-full max-w-md bg-[#ddd6df] p-6 rounded-lg shadow-lg flex flex-col gap-4"
+                onSubmit={handleLogin}
+            >
+                <Input 
+                    label="E-mail" 
+                    placeholder="Digite seu e-mail" 
+                    type="email" 
+                    value={email} 
+                    onChange={e => setEmail(e.currentTarget.value)}
+                />
+                <Input 
+                    label="Senha" 
+                    placeholder="Digite sua senha" 
+                    type="password" 
+                    value={senha} 
+                    onChange={e => setSenha(e.currentTarget.value)}
+                />
+                <Button 
+                    className="mt-4 w-full bg-[#882abe] text-white rounded-md p-2"
+                    type="submit"
+                    disabled={loading}
+                >
+                    {loading ? "Entrando..." : "Entrar"}
+                </Button>
             </form>
         </div>
     );
