@@ -1,7 +1,7 @@
 "use client"
 import { Button } from "@heroui/button";
 import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Progress } from "@heroui/react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 type TarefaAPI = {
     id: number;
@@ -20,50 +20,26 @@ type ColaboradorDTO = {
 export default function Home() {
     const [isOpen, setIsOpen] = useState(false);
     const [tarefaSelecionada, setTarefaSelecionada] = useState<TarefaAPI | null>(null);
-    const [tarefas, setTarefas] = useState<TarefaAPI[]>([]);
-    const [progresso, setProgresso] = useState<number>(0);
-    const [nomeUsuario, setNomeUsuario] = useState<string>("");
-    const [token, setToken] = useState<string | null>(null);
 
-    // Pegar token do localStorage apenas no cliente
-    useEffect(() => {
-        const storedToken = localStorage.getItem("token");
-        if (storedToken) setToken(storedToken);
-    }, []);
+    // 🔹 MOCK: dados fixos (sem backend)
+    const mockData: ColaboradorDTO = {
+        nome: "João Silva",
+        total: 60,
+        tarefas: [
+            { id: 1, titulo: "Criar layout", descricao: "Montar layout inicial no Figma", status: "Pendente", prazo: "20/09/2025" },
+            { id: 2, titulo: "Implementar API", descricao: "Desenvolver endpoints REST", status: "Pendente", prazo: "25/09/2025" },
+            { id: 3, titulo: "Testes unitários", descricao: "Cobrir serviços principais com testes", status: "Pendente", prazo: "28/09/2025" }
+        ]
+    };
 
-    // Buscar dados do usuário e tarefas
-    useEffect(() => {
-        if (!token) return;
-
-        fetch("http://localhost:8080/api/usuario", {
-            method: "GET",
-            headers: { "Authorization": `Bearer ${token}` }
-        })
-        .then(res => res.json())
-        .then((data: ColaboradorDTO) => {
-            setTarefas(data.tarefas);
-            setProgresso(data.total);
-            setNomeUsuario(data.nome);
-        })
-        .catch(err => console.error(err));
-    }, [token]);
+    const [tarefas, setTarefas] = useState<TarefaAPI[]>(mockData.tarefas);
+    const [progresso, setProgresso] = useState<number>(mockData.total);
+    const [nomeUsuario] = useState<string>(mockData.nome);
 
     function finalizarTarefa(tarefaId: number) {
-        if (!token) return;
-
-        fetch("http://localhost:8080/usuario/atualizar/finalizado", {
-            method: "PUT",
-            headers: { 
-                "Authorization": `Bearer ${token}`,
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ id: tarefaId })
-        })
-        .then(() => {
-            setTarefas(prev => prev.filter(t => t.id !== tarefaId));
-            setTarefaSelecionada(null);
-        })
-        .catch(err => console.error(err));
+        setTarefas(prev => prev.filter(t => t.id !== tarefaId));
+        setTarefaSelecionada(null);
+        setProgresso(prev => Math.min(prev + 10, 100));
     }
 
     return (
@@ -126,21 +102,20 @@ export default function Home() {
                         <ModalBody>
                             {tarefaSelecionada && (
                                 <>
-                                    <h2>Título: {tarefaSelecionada.titulo}</h2>
-                                    <p><strong>Descrição:</strong> {tarefaSelecionada.descricao}</p>
+                                    <h2 className="font-bold">{tarefaSelecionada.titulo}</h2>
                                     <p><strong>Prazo:</strong> {tarefaSelecionada.prazo}</p>
-                                    <p><strong>Status:</strong> {tarefaSelecionada.status}</p>
+                                    <p><strong>Descrição:</strong> {tarefaSelecionada.descricao}</p>
                                 </>
                             )}
                         </ModalBody>
                         <ModalFooter>
                             <Button 
                                 onClick={() => tarefaSelecionada && finalizarTarefa(tarefaSelecionada.id)} 
-                                color='secondary'
+                                className="bg-[#993399] text-white"
                             >
                                 Finalizar
                             </Button>
-                            <Button onClick={() => setIsOpen(false)} color='danger'>Sair</Button>
+                            <Button onClick={() => setIsOpen(false)} color='danger'>Fechar</Button>
                         </ModalFooter>
                     </ModalContent>
                 </Modal>
