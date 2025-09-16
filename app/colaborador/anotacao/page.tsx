@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Textarea, Input } from '@heroui/input';
 import { Button } from '@heroui/button';
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@heroui/react";
@@ -17,77 +17,54 @@ export default function Anotacoes() {
     const [anotacao, setAnotacao] = useState('');
     const [anotacaoSelecionada, setAnotacaoSelecionada] = useState<Anotacao | null>(null);
     const [isOpen, setIsOpen] = useState(false);
-    const [token, setToken] = useState<string | null>(null);
 
-    // Pega token do localStorage
-    useEffect(() => {
-        const storedToken = localStorage.getItem("token");
-        if (storedToken) setToken(storedToken);
-    }, []);
-
-    // Buscar anotações do backend
-    useEffect(() => {
-        if (!token) return;
-
-        fetch("http://localhost:8080/anotacao", {
-            method: "GET",
-            headers: { "Authorization": `Bearer ${token}` }
-        })
-        .then(res => res.json())
-        .then((data: Anotacao[]) => setListaAnotacao(data))
-        .catch(err => console.error(err));
-    }, [token]);
-
-    // Salvar anotação
+    // Criar nova anotação
     function salvar() {
-        if (!titulo || !anotacao || !token) return;
+        if (!titulo || !anotacao) return;
+        const nova: Anotacao = {
+            id: Date.now(),
+            titulo,
+            anotacao
+        };
+        setListaAnotacao(prev => [...prev, nova]);
+        setTitulo('');
+        setAnotacao('');
+    }
 
-        fetch("http://localhost:8080/anotacao", {
-            method: "POST",
-            headers: { 
-                "Authorization": `Bearer ${token}`,
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ titulo, anotacao })
-        })
-        .then(res => res.json())
-        .then((nova: Anotacao) => {
-            setListaAnotacao(prev => [...prev, nova]);
-            setTitulo('');
-            setAnotacao('');
-        })
-        .catch(err => console.error(err));
+    // Abrir modal para edição
+    function abrirModal(a: Anotacao) {
+        setAnotacaoSelecionada(a);
+        setIsOpen(true);
+    }
+
+    // Atualizar anotação no modal
+    function atualizarAnotacao() {
+        if (!anotacaoSelecionada) return;
+        setListaAnotacao(prev => prev.map(a => 
+            a.id === anotacaoSelecionada.id ? anotacaoSelecionada : a
+        ));
+        setIsOpen(false);
+        setAnotacaoSelecionada(null);
     }
 
     // Remover anotação
-    function removerAnotacao(id: number) {
-        if (!token) return;
-
-        fetch("http://localhost:8080/anotacao", {
-            method: "PUT",
-            headers: { 
-                "Authorization": `Bearer ${token}`,
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ id })
-        })
-        .then(() => {
-            setListaAnotacao(prev => prev.filter(a => a.id !== id));
-            setAnotacaoSelecionada(null);
-            setIsOpen(false);
-        })
-        .catch(err => console.error(err));
+    function removerAnotacao() {
+        if (!anotacaoSelecionada) return;
+        setListaAnotacao(prev => prev.filter(a => a.id !== anotacaoSelecionada.id));
+        setIsOpen(false);
+        setAnotacaoSelecionada(null);
     }
 
     return (
-        <div className="h-full w-full space-y-1 flex flex-col">
+        <div className="h-full w-full space-y-2 flex flex-col">
+            {/* Criar nova anotação */}
             <div className="w-full h-fit bg-[#ffff] text-[#000] rounded-md shadow-md flex flex-col p-2">
-                <h1 className="text-[#993399] font-semibold mb-1">Anotação</h1>
+                <h1 className="text-[#993399] font-semibold mb-1">Nova Anotação</h1>
                 <Input 
-                    label='Titulo' 
+                    label='Título' 
                     type="text" 
                     className="w-full mb-2 rounded-md" 
-                    placeholder="Digite o titulo da anotação" 
+                    placeholder="Digite o título da anotação" 
                     value={titulo} 
                     onChange={(e:any) => setTitulo(e.currentTarget.value)}
                 />
@@ -98,9 +75,15 @@ export default function Anotacoes() {
                     value={anotacao} 
                     onChange={(e:any) => setAnotacao(e.currentTarget.value)}
                 />
-                <Button className="bg-[#993399] mt-2 w-[80px] ml-auto text-white" onClick={salvar}>Salvar</Button>
+                <Button 
+                    className="bg-[#993399] mt-2 w-[80px] ml-auto text-white" 
+                    onClick={salvar}
+                >
+                    Salvar
+                </Button>
             </div>
 
+            {/* Lista de anotações */}
             <div className="h-full w-full bg-[#ffff] rounded-md shadow-md pt-2 overflow-auto">
                 <h1 className="text-[#993399] ml-2 mt-2 mb-2 font-semibold">Minhas Anotações</h1>
                 <ul className="w-full px-2 h-fit text-black mx-auto overflow-auto space-y-1">
@@ -109,7 +92,7 @@ export default function Anotacoes() {
                             <p>{a.titulo}</p>
                             <Button 
                                 className="p-2 bg-[#993399] rounded-md text-white" 
-                                onClick={() => { setAnotacaoSelecionada(a); setIsOpen(true); }}
+                                onClick={() => abrirModal(a)}
                             >
                                 Visualizar
                             </Button>
@@ -118,21 +101,26 @@ export default function Anotacoes() {
                 </ul>
             </div>
 
+            {/* Modal */}
             <Modal isOpen={isOpen} onClose={setIsOpen}>
                 <ModalContent>
                     <ModalHeader>
-                        <h1>{anotacaoSelecionada?.titulo}</h1>
+                        <Input 
+                            value={anotacaoSelecionada?.titulo || ''} 
+                            onChange={(e:any) => anotacaoSelecionada && setAnotacaoSelecionada({...anotacaoSelecionada, titulo: e.currentTarget.value})}
+                            placeholder="Título"
+                        />
                     </ModalHeader>
                     <ModalBody>
-                        <p>{anotacaoSelecionada?.anotacao}</p>
+                        <Textarea 
+                            value={anotacaoSelecionada?.anotacao || ''} 
+                            onChange={(e:any) => anotacaoSelecionada && setAnotacaoSelecionada({...anotacaoSelecionada, anotacao: e.currentTarget.value})}
+                            placeholder="Anotação"
+                        />
                     </ModalBody>
-                    <ModalFooter>
-                        <Button 
-                            color="danger" 
-                            onClick={() => anotacaoSelecionada && removerAnotacao(anotacaoSelecionada.id)}
-                        >
-                            Remover
-                        </Button>
+                    <ModalFooter className="flex justify-between">
+                        <Button color="danger" onClick={removerAnotacao}>Remover</Button>
+                        <Button onClick={atualizarAnotacao}>Salvar</Button>
                         <Button onClick={() => setIsOpen(false)}>Fechar</Button>
                     </ModalFooter>
                 </ModalContent>
