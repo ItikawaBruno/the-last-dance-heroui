@@ -1,163 +1,123 @@
 'use client'
-import { ResponsivePie } from '@nivo/pie'
-import { ResponsiveLine } from '@nivo/line'
+import { useState } from "react";
+import { Select, SelectItem } from "@heroui/react";
+import { ResponsivePie } from '@nivo/pie';
+import { ResponsiveLine } from '@nivo/line';
 
-export default function Dashboard(){
+const colaboradores = [
+  { nome: "João Silva", id: "joao" },
+  { nome: "Maria Souza", id: "maria" },
+  { nome: "Carlos Pereira", id: "carlos" }
+];
 
-    const data = 
-[
-  {
-    "id": "sass",
-    "label": "sass",
-    "value": 442,
-    "color": "hsl(26, 70%, 50%)"
-  },
-  {
-    "id": "hack",
-    "label": "hack",
-    "value": 342,
-    "color": "hsl(260, 70%, 50%)"
-  },
-  {
-    "id": "scala",
-    "label": "scala",
-    "value": 509,
-    "color": "hsl(63, 70%, 50%)"
-  }
-]
-
-    const dataLine = [
-  {
-    "id": "japan",
-    "data": [
-      {
-        "x": "plane",
-        "y": 128
-      },
-      {
-        "x": "helicopter",
-        "y": 43
-      },
-      {
-        "x": "boat",
-        "y": 29
-      },
-      {
-        "x": "train",
-        "y": 117
-      },
-      {
-        "x": "subway",
-        "y": 95
-      },
-      {
-        "x": "bus",
-        "y": 146
-      },
-      {
-        "x": "car",
-        "y": 274
-      },
-      {
-        "x": "moto",
-        "y": 120
-      },
-      {
-        "x": "bicycle",
-        "y": 142
-      },
-      {
-        "x": "horse",
-        "y": 190
-      },
-      {
-        "x": "skateboard",
-        "y": 51
-      },
-      {
-        "x": "others",
-        "y": 172
-      }
+const dadosDashboard: Record<string, { total: number; pie: any[]; line: any[] }> = {
+  joao: {
+    total: 28,
+    pie: [
+      { id: "pendentes", label: "Pendentes", value: 12 },
+      { id: "concluidas", label: "Concluídas", value: 16 }
+    ],
+    line: [
+      { id: "tarefas", data: [
+        { x: "Seg", y: 5 }, { x: "Ter", y: 8 }, { x: "Qua", y: 6 }, 
+        { x: "Qui", y: 4 }, { x: "Sex", y: 5 }
+      ] }
     ]
   },
-]
+  maria: {
+    total: 35,
+    pie: [
+      { id: "pendentes", label: "Pendentes", value: 10 },
+      { id: "concluidas", label: "Concluídas", value: 25 }
+    ],
+    line: [
+      { id: "tarefas", data: [
+        { x: "Seg", y: 7 }, { x: "Ter", y: 9 }, { x: "Qua", y: 8 }, 
+        { x: "Qui", y: 6 }, { x: "Sex", y: 5 }
+      ] }
+    ]
+  },
+  carlos: {
+    total: 42,
+    pie: [
+      { id: "pendentes", label: "Pendentes", value: 18 },
+      { id: "concluidas", label: "Concluídas", value: 24 }
+    ],
+    line: [
+      { id: "tarefas", data: [
+        { x: "Seg", y: 8 }, { x: "Ter", y: 10 }, { x: "Qua", y: 9 }, 
+        { x: "Qui", y: 8 }, { x: "Sex", y: 7 }
+      ] }
+    ]
+  }
+};
 
-    return(
-        <>
-            <div className="h-full w-full flex flex-col space-y-1">
-                <div className="h-full w-full flex space-x-1">
-                    <div className="h-full w-[40%] bg-[#ffff] rounded-md shadeow-md p-2">
-                        <h1 className="text-[#993399] font-semibold">Total de Tarefas Realizadas</h1>
-                        <div className="h-full w-full flex justify-center items-center">
-                            <h1 className="text-[70px] text-[#993399]">9</h1>
-                        </div>
-                    </div>
-                    <div className="h-full w-full bg-[#ffff] rounded-md shadeow-md p-2">
-                        <h1 className='text-[#993399] font-semibold'>Porcentagem dos Tipos de Tarefa</h1>
-                        <div className="h-full w-full items-end justify-end">
-                                <ResponsivePie
-                        data={data}
-                        margin={{ top: 40, right: 40, bottom: 80, left: 80 }}
-                        startAngle={-54}
-                        innerRadius={0.25}
-                        padAngle={2}
-                        cornerRadius={13}
-                        activeOuterRadiusOffset={8}
-                        colors={{ scheme: 'pink_yellowGreen' }}
-                        arcLinkLabelsSkipAngle={10}
-                        arcLinkLabelsTextColor="#333333"
-                        arcLinkLabelsThickness={2}
-                        arcLinkLabelsColor={{ from: 'color' }}
-                        arcLabelsSkipAngle={14}
-                        arcLabelsTextColor="black"
-                        motionConfig="stiff"
-                        transitionMode="startAngle"
-                        legends={[
-                            {
-                                anchor: 'bottom',
-                                direction: 'row',
-                                translateY: 56,
-                                itemWidth: 100,
-                                itemHeight: 18,
-                                symbolShape: 'circle'
-                            }
-                        ]}
-                    />
-                        </div>
-                    </div>
-                </div>
-                <div className="h-full w-full bg-[#ffff] rounded-md shadeow-md">
-                    <ResponsiveLine
-                data={dataLine}
-                margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
-                yScale={{ type: 'linear', min: 'auto', max: 'auto', stacked: true, reverse: false }}
-                curve="cardinal"
-                axisBottom={{ legend: 'transportation', legendOffset: 36 }}
-                axisLeft={{ legend: 'count', legendOffset: -40 }}
-                colors={{ scheme: 'purpleRed_green' }}
-                lineWidth={6}
-                pointSize={10}
-                pointColor={{ theme: 'background' }}
-                pointBorderWidth={2}
-                pointBorderColor={{ from: 'seriesColor' }}
-                pointLabelYOffset={-12}
-                areaOpacity={0}
-                enableTouchCrosshair={true}
-                useMesh={true}
-                isInteractive={false}
-                legends={[
-                    {
-                        anchor: 'bottom-right',
-                        direction: 'column',
-                        translateX: 100,
-                        itemWidth: 80,
-                        itemHeight: 22,
-                        symbolShape: 'circle'
-                    }
-                ]}
-            />
-                </div>
-            </div>
-        </>
-    );
+export default function Dashboard() {
+  const [colaborador, setColaborador] = useState("joao");
+  const { total, pie, line } = dadosDashboard[colaborador];
+
+  return (
+    <div className="h-full w-full p-4 flex flex-col space-y-4">
+      <h1 className="text-[#993399] font-bold text-2xl mb-2">Dashboard</h1>
+      
+      {/* Select do colaborador */}
+      <div className="w-[250px] mb-4">
+        <Select
+          label="Colaborador"
+          placeholder="Selecione um colaborador"
+          selectedKeys={colaborador ? [colaborador] : []}
+          labelPlacement="outside-top"
+          onSelectionChange={(keys) => {
+            const selected = Array.from(keys)[0] as string;
+            setColaborador(selected || 'joao');
+          }}
+          className="z-10"
+        >
+          {colaboradores.map(c => (
+            <SelectItem key={c.id} value={c.id}>{c.nome}</SelectItem>
+          ))}
+        </Select>
+      </div>
+
+      <div className="flex space-x-4 h-[300px]">
+        <div className="flex-1 bg-white rounded-md shadow-md p-4 flex flex-col justify-center items-center">
+          <h2 className="text-[#993399] font-semibold mb-2">Total de Tarefas</h2>
+          <h1 className="text-[60px] text-[#993399]">{total}</h1>
+        </div>
+        
+        <div className="flex-1 bg-white rounded-md shadow-md p-2">
+          <h2 className="text-[#993399] font-semibold mb-2">Tipos de Tarefa</h2>
+          <ResponsivePie
+            data={pie}
+            margin={{ top: 40, right: 40, bottom: 80, left: 40 }}
+            innerRadius={0.3}
+            padAngle={2}
+            cornerRadius={5}
+            colors={{ scheme: "pink_yellowGreen" }}
+            arcLabelsSkipAngle={10}
+            arcLabelsTextColor="black"
+            legends={[{ anchor: "bottom", direction: "row", translateY: 56, itemWidth: 100, itemHeight: 18, symbolShape: "circle" }]}
+          />
+        </div>
+      </div>
+
+      <div className="bg-white rounded-md shadow-md p-2 h-[300px]">
+        <h2 className="text-[#993399] font-semibold mb-2">Tarefas por Dia</h2>
+        <ResponsiveLine
+          data={line}
+          margin={{ top: 50, right: 50, bottom: 50, left: 60 }}
+          xScale={{ type: "point" }}
+          yScale={{ type: "linear", min: 0, max: "auto" }}
+          axisBottom={{ legend: "Dia", legendOffset: 36 }}
+          axisLeft={{ legend: "Qtd", legendOffset: -40 }}
+          colors={{ scheme: "purpleRed_green" }}
+          lineWidth={4}
+          pointSize={8}
+          pointBorderWidth={2}
+          useMesh={true}
+          isInteractive={true}
+        />
+      </div>
+    </div>
+  );
 }
