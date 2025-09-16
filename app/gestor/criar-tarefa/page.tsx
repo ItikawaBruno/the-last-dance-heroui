@@ -79,12 +79,16 @@ export default function CriarTarefa() {
                 />
 
                 <Select
+                    key={`select-${colaboradorEmail}`}
                     label="Colaborador"
-                    value={colaboradorEmail}
-                    onValueChange={val => setColaboradorEmail(val)}
+                    selectedKeys={new Set([colaboradorEmail])}
+                    onSelectionChange={(value) => {
+                        const selected = Array.from(value)[0] as string;
+                        setColaboradorEmail(selected);
+                    }}
                 >
                     {colaboradores.map(c => (
-                        <SelectItem key={c.email} value={c.email}>{c.nome} ({c.email})</SelectItem>
+                        <SelectItem key={c.email} value={c.email}>{c.email}</SelectItem>
                     ))}
                 </Select>
 

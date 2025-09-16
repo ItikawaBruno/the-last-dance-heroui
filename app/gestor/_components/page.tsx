@@ -43,7 +43,7 @@ export default function SideBar() {
     { name: "Anotações", icon: <Notebook size={22} />, route: "/gestor/anotacao" },
     { name: "Documentos", icon: <Notebook size={22} />, route: "/gestor/documento" },
     { name: "Criar reunião", icon: <Camera size={22} />, route: "/gestor/criar-reuniao" },
-    { name: "Tarefas", icon: <Plus size={22} />, route: "/gestor/new-tarefa" },
+    { name: "Tarefas", icon: <Plus size={22} />, route: "/gestor/criar-tarefa" },
   ];
 
   return (

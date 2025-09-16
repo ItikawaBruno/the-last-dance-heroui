@@ -12,41 +12,44 @@ const colaboradores = [
 
 const dadosDashboard: Record<string, { total: number; pie: any[]; line: any[] }> = {
   joao: {
-    total: 28,
+    total: 15,
     pie: [
-      { id: "pendentes", label: "Pendentes", value: 12 },
-      { id: "concluidas", label: "Concluídas", value: 16 }
+      { id: "pendentes", label: "Pendentes", value: 5 },
+      { id: "finalizadas", label: "Finalizadas", value: 4 },
+      { id: "concluidas", label: "Concluídas", value: 6 }
     ],
     line: [
       { id: "tarefas", data: [
-        { x: "Seg", y: 5 }, { x: "Ter", y: 8 }, { x: "Qua", y: 6 }, 
-        { x: "Qui", y: 4 }, { x: "Sex", y: 5 }
+        { x: "Seg", y: 2 }, { x: "Ter", y: 4 }, { x: "Qua", y: 3 }, 
+        { x: "Qui", y: 3 }, { x: "Sex", y: 3 }
       ] }
     ]
   },
   maria: {
-    total: 35,
+    total: 18,
     pie: [
-      { id: "pendentes", label: "Pendentes", value: 10 },
-      { id: "concluidas", label: "Concluídas", value: 25 }
+      { id: "pendentes", label: "Pendentes", value: 6 },
+      { id: "finalizadas", label: "Finalizadas", value: 5 },
+      { id: "concluidas", label: "Concluídas", value: 7 }
     ],
     line: [
       { id: "tarefas", data: [
-        { x: "Seg", y: 7 }, { x: "Ter", y: 9 }, { x: "Qua", y: 8 }, 
-        { x: "Qui", y: 6 }, { x: "Sex", y: 5 }
+        { x: "Seg", y: 3 }, { x: "Ter", y: 5 }, { x: "Qua", y: 4 }, 
+        { x: "Qui", y: 3 }, { x: "Sex", y: 3 }
       ] }
     ]
   },
   carlos: {
-    total: 42,
+    total: 20,
     pie: [
-      { id: "pendentes", label: "Pendentes", value: 18 },
-      { id: "concluidas", label: "Concluídas", value: 24 }
+      { id: "pendentes", label: "Pendentes", value: 7 },
+      { id: "finalizadas", label: "Finalizadas", value: 6 },
+      { id: "concluidas", label: "Concluídas", value: 7 }
     ],
     line: [
       { id: "tarefas", data: [
-        { x: "Seg", y: 8 }, { x: "Ter", y: 10 }, { x: "Qua", y: 9 }, 
-        { x: "Qui", y: 8 }, { x: "Sex", y: 7 }
+        { x: "Seg", y: 4 }, { x: "Ter", y: 5 }, { x: "Qua", y: 4 }, 
+        { x: "Qui", y: 4 }, { x: "Sex", y: 3 }
       ] }
     ]
   }
@@ -63,10 +66,10 @@ export default function Dashboard() {
       {/* Select do colaborador */}
       <div className="w-[250px] mb-4">
         <Select
+          key={colaborador}
           label="Colaborador"
           placeholder="Selecione um colaborador"
-          selectedKeys={colaborador ? [colaborador] : []}
-          labelPlacement="outside-top"
+          defaultSelectedKeys={[colaborador]}
           onSelectionChange={(keys) => {
             const selected = Array.from(keys)[0] as string;
             setColaborador(selected || 'joao');

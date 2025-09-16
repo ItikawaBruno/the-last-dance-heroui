@@ -54,7 +54,7 @@ export default function Home() {
             <div className="h-fit w-full flex flex-col bg-[#ffffff] rounded-md shadow-md">
                 <div className="h-full w-full px-3 py-4 flex justify-center items-center">
                     <Progress 
-                        label="Progresso das tarefas" 
+                        label="Progresso do Onboarding" 
                         radius="md" 
                         showValueLabel={true} 
                         value={progresso} 
