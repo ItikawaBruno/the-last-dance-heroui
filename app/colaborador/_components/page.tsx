@@ -9,6 +9,8 @@ import {
   Notebook,
   ChevronLeft,
   ChevronRight,
+  NotebookPen,
+  Camera,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -40,7 +42,9 @@ export default function SideBar() {
     { name: "Chat", icon: <MessageCircle size={22} />, route: "/colaborador/chat" },
     { name: "Tarefas", icon: <CheckSquare size={22} />, route: "/colaborador/tarefas" },
     { name: "Dashboard", icon: <LayoutDashboard size={22} />, route: "/colaborador/dashboard" },
-    { name: "Anotações", icon: <Notebook size={22} />, route: "/colaborador/anotacao" },
+    { name: "Anotações", icon: <NotebookPen size={22} />, route: "/colaborador/anotacao" },
+    { name: "Documentos", icon: <Notebook size={22} />, route: "/colaborador/documento" },
+    { name: "Reuniões", icon: <Camera size={22} />, route: "/colaborador/reunioes" },
   ];
 
   return (
