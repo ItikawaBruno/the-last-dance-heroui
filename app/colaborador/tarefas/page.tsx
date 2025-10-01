@@ -91,7 +91,7 @@ export default function Tarefas() {
       </div>
 
       {/* Lista */}
-      <div className="h-full w-full bg-white rounded-md shadow-md overflow-y-auto p-3">
+      <div className="h-full w-full flex flex-col bg-white rounded-md shadow-md overflow-y-auto p-3">
         <h1 className="text-[#993399] font-bold mb-3">Minhas Tarefas</h1>
         <ul className="flex flex-col gap-3">
           {tarefasFiltradas.length === 0 ? (

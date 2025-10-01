@@ -97,7 +97,7 @@ export default function GestorHome() {
     }
 
     return (
-        <div className="w-full bg-white p-6 rounded-lg shadow-md">
+        <div className="w-full flex flex-col bg-white p-6 rounded-lg shadow-md h-full">
             {/* Saudação do Gestor */}
             <h1 className="text-xl font-bold text-[#333] mb-6">
                 Olá, Pedro Santos

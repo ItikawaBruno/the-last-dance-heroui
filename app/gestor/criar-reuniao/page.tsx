@@ -103,11 +103,13 @@ export default function CriarReuniao() {
           ))}
         </Select>
 
+          <Input type="file"></Input>
+
         <Button className="bg-[#993399] text-white w-[120px]" onClick={salvarReuniao}>Salvar</Button>
       </div>
 
       {/* Lista de reuniões */}
-      <div className="bg-white p-4 rounded-md shadow-md flex flex-col gap-2">
+      <div className="bg-white p-4 rounded-md shadow-md flex flex-col gap-2 h-full">
         <h2 className="text-[#993399] font-semibold">Reuniões Criadas</h2>
         <ul className="space-y-2">
           {reunioes.map(r => (

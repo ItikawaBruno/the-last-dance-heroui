@@ -54,9 +54,9 @@ export default function CriarTarefa() {
 
     return (
         <div className="h-full w-full flex flex-col p-4 space-y-4">
-            <h1 className="text-[#993399] font-bold text-2xl">Criar Tarefa</h1>
 
             <div className="bg-white p-4 rounded-md shadow-md flex flex-col gap-4">
+                <h1 className="text-[#993399] font-bold text-2xl">Criar Tarefa</h1>
                 <Input
                     label="Título"
                     placeholder="Digite o título da tarefa"
@@ -101,7 +101,7 @@ export default function CriarTarefa() {
             </div>
 
             {/* Lista de tarefas criadas */}
-            <div className="bg-white p-4 rounded-md shadow-md flex flex-col gap-2">
+            <div className="bg-white p-4 rounded-md shadow-md flex flex-col gap-2 h-full">
                 <h2 className="text-[#993399] font-semibold">Tarefas Criadas</h2>
                 <ul className="space-y-2">
                     {tarefas.map(t => (
